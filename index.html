@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road 2 Redemption - Team</title>
+    <style>
+        :root {
+            --primary-blue: #AFEEEE;
+            --text-black: #0d0d0d;
+            --accent-white: #f0f0f0;
+            --line-color: var(--text-black);
+            --scroll-bar-height: 4px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica Neue', sans-serif;
+            background-color: var(--primary-blue);
+            color: var(--text-black);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            cursor: none;
+            padding-top: var(--scroll-bar-height);
+            overflow-x: hidden;
+        }
+
+        #scrollProgressBar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: var(--scroll-bar-height);
+            background-color: var(--text-black);
+            width: 0%;
+            z-index: 101;
+            transition: width 0.1s linear;
+        }
+
+        #customCursor {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-white);
+            border: 1px solid var(--text-black);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: opacity 0.2s ease-out, transform 0.05s linear;
+            opacity: 0;
+        }
+
+        body:hover #customCursor {
+            opacity: 1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 2px solid var(--text-black);
+            background-color: var(--primary-blue);
+            position: sticky;
+            top: var(--scroll-bar-height);
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-family: 'Impact', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--text-black);
+            margin-right: 20px;
+            line-height: 1;
+        }
+
+        .taglines {
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            line-height: 1.4;
+            color: var(--text-black);
+            text-transform: uppercase;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-weight: normal;
+        }
+
+        .header-nav {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .header-nav a {
+            text-decoration: none;
+            color: var(--text-black);
+            margin: 0 15px;
+            font-size: 0.9rem;
+            font-weight: normal;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            cursor: none;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+
+        .header-nav a:hover {
+            color: var(--accent-white);
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+
+        .icon { /* Includes your new .discord-icon styling if it uses this base class */
+            font-size: 1.2rem;
+            margin-left: 15px;
+            cursor: none;
+            color: var(--text-black);
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-weight: normal;
+            text-decoration: none; /* Added for the anchor tag if it's the icon */
+        }
+        .icon:hover { /* Added for the anchor tag if it's the icon */
+            color: var(--accent-white);
+        }
+
+
+        .header-right-text {
+            flex-shrink: 0;
+            text-align: right;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: var(--text-black);
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+
+        .header-right-text .hire-me {
+            font-weight: normal;
+        }
+
+        .header-right-text .hire-me a {
+            font-weight: normal;
+            color: var(--text-black);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            cursor: none;
+        }
+
+        .header-right-text .hire-me a:hover {
+            color: var(--accent-white);
+        }
+
+        .main-content {
+            flex-grow: 1;
+            position: relative;
+            display: flex;
+            height: 60vh;
+            min-height: 400px;
+            max-height: 600px;
+        }
+
+        #wavyLinesCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .section-with-noise::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: -1;
+            animation: noiseAnim 0.5s infinite steps(2);
+        }
+
+        @keyframes noiseAnim {
+            0% { transform: translate(2px, 1px); }
+            25% { transform: translate(-1px, -2px); }
+            50% { transform: translate(-2px, 2px); }
+            75% { transform: translate(1px, -1px); }
+            100% { transform: translate(2px, 1px); }
+        }
+
+        /* Join Now Section */
+        .join-now-section {
+            padding: 60px 30px;
+            background-color: var(--primary-blue);
+            position: relative;
+            z-index: 5;
+            border-top: 2px solid var(--text-black);
+            text-align: center;
+        }
+
+        .join-now-content {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-black);
+        }
+
+        .join-now-content h2 {
+            font-family: 'Impact', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            color: var(--text-black);
+        }
+
+        .join-button {
+            display: inline-block;
+            padding: 15px 45px;
+            border: 2px solid var(--text-black);
+            color: var(--text-black);
+            background-color: transparent;
+            text-decoration: none;
+            font-family: 'Impact', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 1.3rem;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+            cursor: none;
+            letter-spacing: 1px;
+        }
+
+        .join-button:hover {
+            background-color: var(--text-black);
+            color: var(--primary-blue);
+            transform: scale(1.05);
+        }
+
+        /* About Section */
+        .about-section {
+            padding: 60px 30px;
+            background-color: var(--primary-blue);
+            position: relative;
+            z-index: 5;
+            border-top: 2px solid var(--text-black);
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-black);
+            text-align: center;
+        }
+
+        .about-content h2 {
+            font-family: 'Impact', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .about-content p {
+            font-size: 1rem;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            text-align: left;
+            font-family: 'Arial', 'Helvetica Neue', sans-serif;
+        }
+
+        /* Games Section */
+        .games-section {
+            padding: 80px 30px;
+            background-color: var(--primary-blue);
+            position: relative;
+            z-index: 5;
+            border-top: 2px solid var(--text-black);
+            overflow: hidden;
+        }
+
+        .games-section-title {
+            font-family: 'Impact', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 3rem;
+            color: var(--text-black);
+            text-align: center;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+        }
+
+        .game-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 50px;
+            max-width: 1000px;
+            margin: 0 auto;
+            perspective: 1500px;
+        }
+
+        .game-card {
+            background: rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--text-black);
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1), box-shadow 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        .game-card:hover {
+            transform: translateZ(30px) rotateX(5deg) rotateY(5deg) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-card h3 {
+            font-family: 'Impact', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 2.5rem;
+            color: var(--text-black);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 2;
+        }
+
+        .game-card h3 span { /* Part of text animation */
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: letterAppear 0.4s forwards;
+        }
+
+        .game-card p {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--text-black);
+            margin-bottom: 25px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .game-card .card-link {
+            display: inline-block;
+            padding: 10px 25px;
+            border: 1px solid var(--text-black);
+            color: var(--text-black);
+            text-decoration: none;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .game-card .card-link:hover {
+            background-color: var(--text-black);
+            color: var(--primary-blue);
+        }
+
+        /* Staff / Contact Section */
+        .staff-section {
+            padding: 80px 30px;
+            background-color: var(--primary-blue);
+            position: relative;
+            z-index: 5;
+            border-top: 2px solid var(--text-black);
+            overflow: hidden; /* Contain noise */
+        }
+        .staff-section::before { /* Noise background specific to staff section */
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: -1;
+            animation: noiseAnim 0.5s infinite steps(2);
+        }
+
+        .staff-section-title {
+            font-family: 'Impact', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 3rem;
+            color: var(--text-black);
+            text-align: center;
+            margin-bottom: 60px;
+            text-transform: uppercase;
+        }
+
+        .staff-cards-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            perspective: 1800px;
+        }
+
+        .staff-card {
+            background: rgba(0, 0, 0, 0.12);
+            border: 1px solid var(--text-black);
+            border-left: 3px solid var(--text-black);
+            padding: 25px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        .staff-card:hover {
+            transform: translateZ(40px) rotateX(8deg) rotateY(-8deg) scale(1.05);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.35);
+        }
+
+        .staff-card .staff-role {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: var(--text-black);
+            opacity: 0.8;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .staff-card h3 {
+            font-family: 'Impact', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 1.8rem;
+            color: var(--text-black);
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 2;
+        }
+
+        .staff-card h3 span { /* Part of text animation */
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: letterAppear 0.4s forwards;
+        }
+
+        /* Marquee/Title Section */
+        .marquee-section {
+            background-color: var(--primary-blue);
+            padding: 20px 0;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+            border-top: 2px solid var(--text-black);
+            border-bottom: 2px solid var(--text-black);
+        }
+
+        .binary-ticker {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.7rem;
+            color: var(--text-black);
+            padding: 5px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 100%;
+            border-top: 1px solid var(--text-black);
+            border-bottom: 1px solid var(--text-black);
+            margin-bottom: 15px;
+        }
+
+        .binary-ticker.bottom {
+            margin-top: 15px;
+            margin-bottom: 0;
+        }
+
+        .binary-ticker span {
+            display: inline-block;
+            padding-left: 100%;
+            animation: scrollTicker 30s linear infinite;
+        }
+
+        @keyframes scrollTicker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .main-title {
+            font-family: 'Impact', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: clamp(3rem, 12vw, 8rem);
+            font-weight: bold;
+            color: var(--text-black);
+            text-transform: uppercase;
+            letter-spacing: -0.02em;
+            line-height: 1;
+            margin: 0;
+            padding: 10px 5px;
+            display: inline-block;
+        }
+
+        .main-title span { /* Part of text animation */
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(30px) scale(0.8);
+            animation: letterAppear 0.5s forwards;
+        }
+
+        @keyframes letterAppear { /* Shared animation for text */
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            body, .main-content, .icon, .header-nav a, .header-right-text a {
+                cursor: default;
+            }
+            #customCursor {
+                display: none;
+            }
+            .header {
+                position: static;
+                flex-direction: column;
+                align-items: center;
+                padding: 15px;
+                top: 0;
+            }
+            body {
+                padding-top: 0;
+            }
+            .header-left {
+                flex-direction: column;
+                align-items: center;
+                margin-bottom: 15px;
+            }
+            .logo {
+                margin-right: 0;
+                margin-bottom: 5px;
+                font-size: 2rem;
+            }
+            .taglines {
+                text-align: center;
+                font-size: 0.6rem;
+            }
+            .header-nav {
+                flex-grow: 0;
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
+                flex-wrap: wrap;
+                padding: 0 10px;
+            }
+            .header-nav a {
+                margin: 5px 10px;
+                font-size: 0.8rem;
+            }
+            .header-icons {
+                margin-left: 10px; /* Retained from original for spacing */
+            }
+            .header-right-text {
+                text-align: center;
+                margin-top: 10px;
+                margin-left: 0;
+                font-size: 0.7rem;
+                width: 100%;
+            }
+            .main-title {
+                letter-spacing: -0.01em;
+            }
+            .join-now-section {
+                padding: 40px 20px;
+            }
+            .join-now-content h2 {
+                font-size: 2rem;
+            }
+            .join-button {
+                padding: 12px 35px;
+                font-size: 1.1rem;
+                cursor: pointer; /* Default cursor for touch */
+            }
+            .about-section {
+                padding: 40px 20px;
+            }
+            .about-content h2 {
+                font-size: 2rem;
+            }
+            .about-content p {
+                font-size: 0.9rem;
+            }
+            .games-section {
+                padding: 60px 20px;
+            }
+            .games-section-title {
+                font-size: 2.5rem;
+                margin-bottom: 40px;
+            }
+            .game-cards-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .game-card h3 {
+                font-size: 2rem;
+            }
+            .staff-section {
+                padding: 60px 20px;
+            }
+            .staff-section-title {
+                font-size: 2.5rem;
+                margin-bottom: 40px;
+            }
+            .staff-cards-container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .staff-card h3 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="scrollProgressBar"></div>
+    <div id="customCursor"></div>
+
+    <header class="header">
+        <div class="header-left">
+            <div class="logo">R2R</div>
+            <div class="taglines"> SYSTEM ONLINE<br> PLOTTING TRAJECTORY<br> ADJUSTING PARAMETERS...<br> ENGAGE </div>
+        </div>
+        <nav class="header-nav">
+            <a href="#about">About</a>
+            <a href="#games">Games</a>
+            <a href="#contact">Contact</a>
+            <div class="header-icons">
+                <a href="https://discord.gg/ThSXgGCc7T" target="_blank" rel="noopener noreferrer" class="icon discord-icon">DISCORD</a>
+            </div>
+        </nav>
+        <div class="header-right-text"> Esports Team Globally.<br> <span class="hire-me">Currently Recruiting &rarr; <a href="https://form.jotform.com/251150935077153" target="_blank" rel="noopener noreferrer">Apply Now</a></span>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <canvas id="wavyLinesCanvas"></canvas>
+    </main>
+
+    <section id="join-now" class="join-now-section">
+        <div class="join-now-content">
+            <h2>JOIN NOW</h2>
+            <a href="https://form.jotform.com/251150935077153" class="join-button" target="_blank" rel="noopener noreferrer">Join</a>
+        </div>
+    </section>
+
+    <section id="about" class="about-section">
+        <div class="about-content">
+            <h2>About R2R</h2>
+            <p> Welcome to Road 2 Redemption (R2R)! We’re excited to have you as part of our community. At R2R, we believe in second chances, personal growth, and building a strong gaming environment where everyone can thrive and be supported. </p>
+            <p> As you begin this journey with us, know that you’re not alone — we’re here to walk alongside you every step of the way. If you have any questions, need guidance, or just want to connect, don’t hesitate to reach out. </p>
+            <p> We’re looking forward to seeing all the amazing things you’ll accomplish with R2R! We look forward to your journey with us here in R2R! </p>
+        </div>
+    </section>
+
+    <section id="games" class="games-section section-with-noise">
+        <h2 class="games-section-title">Featured Games</h2>
+        <div class="game-cards-container">
+            <div class="game-card">
+                <h3 class="animated-text">Fortnite</h3>
+                <p>Build, battle, and create in this ever-evolving universe. Join the fight and be the last one standing.</p>
+                <a href="#" class="card-link">Learn More</a>
+            </div>
+            <div class="game-card">
+                <h3 class="animated-text">Apex Legends</h3>
+                <p>Master legendary characters with powerful abilities in this strategic battle royale shooter.</p>
+                <a href="#" class="card-link">Learn More</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="staff-section section-with-noise">
+        <h2 class="staff-section-title">Meet the Team</h2>
+        <div class="staff-cards-container">
+            <div class="staff-card">
+                <p class="staff-role">Owner</p>
+                <h3 class="animated-text"> R2R Aryest</h3>
+            </div>
+            <div class="staff-card">
+                <p class="staff-role">Founder / Human Resources</p>
+                <h3 class="animated-text">R2R TooSwoozy</h3>
+            </div>
+            <div class="staff-card">
+                <p class="staff-role">Co Founder</p>
+                <h3 class="animated-text">R2R Rezer1x</h3>
+            </div>
+            <div class="staff-card">
+                <p class="staff-role">Admin</p>
+                <h3 class="animated-text">R2R LEEMO</h3>
+            </div>
+            <div class="staff-card">
+                <p class="staff-role">Admin</p>
+                <h3 class="animated-text">R2R TOOHIGH4TS</h3>
+            </div>
+            <div class="staff-card">
+                <p class="staff-role">Admin</p>
+                <h3 class="animated-text">LESSERROX</h3>
+            </div>
+            <div class="staff-card">
+                <p class="staff-role">Moderator</p>
+                <h3 class="animated-text">@CrapNotVerfied</h3>
+            </div>
+            <div class="staff-card">
+                <p class="staff-role">Social Media Manager</p>
+                <h3 class="animated-text">Nilla</h3>
+            </div>
+        </div>
+    </section>
+
+    <section class="marquee-section">
+        <div class="binary-ticker top">
+            <span id="binaryTopContent"></span>
+        </div>
+        <h1 class="main-title" id="animatedTitle">ROAD 2 REDEMPTION</h1>
+        <div class="binary-ticker bottom">
+            <span id="binaryBottomContent"></span>
+        </div>
+    </section>
+
+    <script>
+        // --- Global Variables & Constants ---
+        const customCursor = document.getElementById('customCursor');
+        const scrollProgressBar = document.getElementById('scrollProgressBar');
+        const canvas = document.getElementById('wavyLinesCanvas');
+        const ctx = canvas ? canvas.getContext('2d') : null;
+
+        let animationFrameId;
+        let mouse = { x: undefined, y: undefined, influenceRadius: 200 };
+        let baseWaveAmplitude;
+        let maxDistortionForce;
+        let verticalInfluenceRange;
+        const numLinesBase = 70;
+        const lineStates = [];
+        const easingFactor = 0.07;
+        const twistFrequency = 0.04;
+        const twistStrength = 0.7;
+        let resizeTimeout;
+
+        // --- UI Enhancements ---
+
+        /**
+         * Handles the custom cursor movement.
+         */
+        function initializeCustomCursor() {
+            if (customCursor) {
+                document.addEventListener('mousemove', (e) => {
+                    customCursor.style.left = e.clientX + 'px';
+                    customCursor.style.top = e.clientY + 'px';
+                });
+            }
+        }
+
+        /**
+         * Updates the scroll progress bar based on page scroll.
+         */
+        function updateScrollProgress() {
+            if (!scrollProgressBar) return;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight;
+            const clientHeight = document.documentElement.clientHeight;
+            const totalScrollableHeight = scrollHeight - clientHeight;
+
+            if (totalScrollableHeight <= 0) {
+                scrollProgressBar.style.width = '0%';
+                return;
+            }
+            const scrollPercentage = (scrollTop / totalScrollableHeight) * 100;
+            scrollProgressBar.style.width = scrollPercentage + '%';
+        }
+
+
+        // --- Wavy Lines Canvas Animation ---
+
+        /**
+         * Initializes or re-initializes parameters for the wavy lines animation.
+         */
+        function initializeCanvasAnimationParameters() {
+            if (!canvas || !ctx) return;
+
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            if (canvas.height === 0) return;
+
+            baseWaveAmplitude = canvas.height * 0.05;
+            maxDistortionForce = Math.min(canvas.width, canvas.height) * 0.12;
+            mouse.influenceRadius = Math.min(canvas.width, canvas.height) * 0.30;
+            verticalInfluenceRange = canvas.height * 0.3;
+
+            const numLines = Math.max(30, Math.floor(numLinesBase * (canvas.width / 1000)));
+            lineStates.length = 0; // Clear existing states
+            for (let i = 0; i < numLines; i++) {
+                lineStates.push({ currentOffset: 0, targetOffset: 0 });
+            }
+        }
+
+        /**
+         * Updates mouse position relative to the canvas.
+         * @param {MouseEvent|TouchEvent} event - The mouse or touch event.
+         */
+        function updateMousePosition(event) {
+            if (!canvas) return;
+            const rect = canvas.getBoundingClientRect();
+            let clientX, clientY;
+
+            if (event.touches && event.touches.length > 0) {
+                clientX = event.touches[0].clientX;
+                clientY = event.touches[0].clientY;
+            } else if (event.clientX !== undefined) {
+                clientX = event.clientX;
+                clientY = event.clientY;
+            } else {
+                mouse.x = undefined;
+                mouse.y = undefined;
+                return;
+            }
+            mouse.x = clientX - rect.left;
+            mouse.y = clientY - rect.top;
+        }
+
+        /**
+         * Main drawing loop for the wavy lines animation.
+         */
+        function drawWavyLines() {
+            if (!canvas || !ctx) { // Stop if canvas is gone
+                if (animationFrameId) cancelAnimationFrame(animationFrameId);
+                return;
+            }
+            // Check for resize and re-initialize if necessary
+            if ((canvas.width !== canvas.offsetWidth || canvas.height !== canvas.offsetHeight) && canvas.offsetHeight > 0) {
+                initializeCanvasAnimationParameters();
+            }
+            // Ensure parameters are set if they weren't (e.g., canvas initially hidden)
+            if (!baseWaveAmplitude && canvas.offsetHeight > 0) {
+                initializeCanvasAnimationParameters();
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const numLines = lineStates.length;
+
+            if (numLines === 0 || canvas.height === 0) {
+                animationFrameId = requestAnimationFrame(drawWavyLines);
+                return;
+            }
+
+            const lineSpacing = canvas.width / numLines;
+            const frequency = 0.018;
+            const speed = 0.025;
+            const time = Date.now() * speed * 0.01;
+
+            ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--line-color').trim();
+            ctx.lineWidth = 1;
+
+            for (let i = 0; i < numLines; i++) {
+                const state = lineStates[i];
+                const baseX = i * lineSpacing + lineSpacing / 2;
+                state.targetOffset = 0;
+
+                if (mouse.x !== undefined) {
+                    const dxToMouse = baseX - mouse.x;
+                    const distanceToMouse = Math.abs(dxToMouse);
+                    if (distanceToMouse < mouse.influenceRadius) {
+                        const normalizedDistance = distanceToMouse / mouse.influenceRadius;
+                        const forceFactor = Math.pow(1 - normalizedDistance, 2);
+                        const direction = dxToMouse >= 0 ? 1 : -1;
+                        state.targetOffset = direction * forceFactor * maxDistortionForce;
+                    }
+                }
+
+                state.currentOffset += (state.targetOffset - state.currentOffset) * easingFactor;
+                if (Math.abs(state.currentOffset) < 0.01) state.currentOffset = 0;
+
+                ctx.beginPath();
+                let isFirstPoint = true;
+                for (let y = 0; y < canvas.height; y += 4) {
+                    const waveXOffset = Math.sin(y * frequency + time + i * 0.2) * baseWaveAmplitude * Math.sin((y / canvas.height) * Math.PI);
+                    const restingX = baseX + waveXOffset;
+                    let gaussianInfluence = 0;
+
+                    if (mouse.y !== undefined && Math.abs(state.currentOffset) > 0) {
+                        const dy = y - mouse.y;
+                        gaussianInfluence = Math.exp(-Math.pow(dy / verticalInfluenceRange, 2));
+                    }
+
+                    let twistOffset = 0;
+                    if (gaussianInfluence > 0.01) {
+                        const dy = y - mouse.y;
+                        twistOffset = state.currentOffset * Math.sin(dy * twistFrequency) * gaussianInfluence * twistStrength;
+                    }
+
+                    const mainPush = state.currentOffset * gaussianInfluence;
+                    const finalLineX = restingX + mainPush + twistOffset;
+
+                    if (isFirstPoint) {
+                        ctx.moveTo(finalLineX, y);
+                        isFirstPoint = false;
+                    } else {
+                        ctx.lineTo(finalLineX, y);
+                    }
+                }
+                ctx.stroke();
+            }
+            animationFrameId = requestAnimationFrame(drawWavyLines);
+        }
+
+        /**
+         * Handles window resize events for the canvas animation.
+         */
+        function handleResize() {
+            clearTimeout(resizeTimeout);
+            if (animationFrameId) cancelAnimationFrame(animationFrameId);
+            resizeTimeout = setTimeout(() => {
+                initializeCanvasAnimationParameters();
+                updateScrollProgress(); // Also update scroll progress on resize
+                if (canvas && canvas.offsetHeight > 0 && ctx) { // Only restart if canvas is valid
+                   animationFrameId = requestAnimationFrame(drawWavyLines);
+                }
+            }, 150);
+        }
+
+        // --- Text Animation ---
+
+        /**
+         * Animates text by revealing letters one by one.
+         * @param {string} selector - CSS selector for the text elements.
+         * @param {number} [delayStep=0.07] - Delay between each letter's appearance.
+         */
+        function animateTextLetters(selector, delayStep = 0.07) {
+            document.querySelectorAll(selector).forEach(element => {
+                if (element.classList.contains('letters-animated')) return; // Already animated
+
+                const text = element.textContent;
+                element.textContent = ''; // Clear original text
+                element.classList.add('letters-animated');
+
+                text.split('').forEach((char, index) => {
+                    const span = document.createElement('span');
+                    span.textContent = char === ' ' ? '\u00A0' : char; // Handle spaces
+                    span.style.animationDelay = `${index * delayStep}s`;
+                    element.appendChild(span);
+                });
+            });
+        }
+
+        // --- Binary Ticker ---
+
+        /**
+         * Generates a random binary string for the ticker.
+         * @param {number} [length=300] - Desired length of the binary string.
+         * @returns {string} The generated binary string.
+         */
+        function generateBinaryString(length = 300) {
+            let str = '';
+            for (let i = 0; i < length; i++) {
+                if (Math.random() < 0.15 && i > 0 && i < length - 1 && str[str.length - 1] !== '/') {
+                    str += '/'.repeat(Math.floor(Math.random() * 5) + 3);
+                } else {
+                    str += Math.random() > 0.5 ? '1' : '0';
+                }
+                str += ' ';
+            }
+            return str;
+        }
+
+        /**
+         * Populates the binary ticker elements.
+         */
+        function initializeBinaryTickers() {
+            const binaryTopContent = document.getElementById('binaryTopContent');
+            const binaryBottomContent = document.getElementById('binaryBottomContent');
+            if (binaryTopContent) {
+                binaryTopContent.textContent = "► " + generateBinaryString() + " ◄";
+            }
+            if (binaryBottomContent) {
+                binaryBottomContent.textContent = "► " + generateBinaryString() + " ◄";
+            }
+        }
+
+        // --- Initialization & Event Listeners ---
+
+        /**
+         * Starts the main canvas animation if conditions are met.
+         */
+        function startMainAnimation() {
+            if (!canvas || !ctx) return; // Don't start if canvas not found
+
+            initializeCanvasAnimationParameters();
+            if (canvas.offsetHeight > 0 && !animationFrameId) {
+                drawWavyLines();
+            } else if (canvas.offsetHeight === 0) {
+                // If canvas is not yet visible (e.g. display:none), retry shortly
+                setTimeout(startMainAnimation, 100);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeCustomCursor();
+            updateScrollProgress(); // Initial call
+            window.addEventListener('scroll', updateScrollProgress);
+
+            // Setup canvas interaction listeners only if canvas exists
+            if (canvas) {
+                canvas.addEventListener('mousemove', updateMousePosition);
+                canvas.addEventListener('touchmove', (e) => {
+                    e.preventDefault(); // Prevent scrolling while touching canvas
+                    updateMousePosition(e);
+                }, { passive: false });
+                canvas.addEventListener('mouseleave', () => { mouse.x = undefined; mouse.y = undefined; });
+                canvas.addEventListener('touchend', () => { mouse.x = undefined; mouse.y = undefined; });
+            }
+
+            window.addEventListener('resize', handleResize);
+
+            // Text animations
+            animateTextLetters('.main-title', 0.07);
+            animateTextLetters('.game-card h3', 0.05);
+            animateTextLetters('.staff-card h3', 0.05);
+
+            initializeBinaryTickers();
+
+            // Delay start of canvas animation slightly to ensure layout is complete
+            setTimeout(() => {
+                startMainAnimation();
+            }, 50);
+        });
+
+        // Fallback for scripts that might load after DOMContentLoaded but before 'complete'
+        // or if DOMContentLoaded already fired.
+        if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
+             setTimeout(() => { // Ensure this doesn't run before DOMContentLoaded setup for canvas
+                if (!animationFrameId && canvas && canvas.offsetHeight > 0 && ctx) {
+                     startMainAnimation(); // Only if not already started
+                }
+                updateScrollProgress(); // Ensure progress bar is correct
+            }, 100);
+        }
+
+    </script>
+</body>
+</html>
