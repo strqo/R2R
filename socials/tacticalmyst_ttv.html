@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R2R Aryest - Socials</title>
+    <style>
+        :root {
+            --primary-blue: #AFEEEE;
+            --text-black: #0d0d0d;
+            --accent-white: #f0f0f0;
+            --scroll-bar-height: 4px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica Neue', sans-serif;
+            background-color: var(--primary-blue);
+            color: var(--text-black);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            cursor: none;
+            padding-top: var(--scroll-bar-height);
+            overflow-x: hidden;
+        }
+
+        #scrollProgressBar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: var(--scroll-bar-height);
+            background-color: var(--text-black);
+            width: 0%;
+            z-index: 101;
+            transition: width 0.1s linear;
+        }
+
+        #customCursor {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-white);
+            border: 1px solid var(--text-black);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            transition: opacity 0.2s ease-out, transform 0.05s linear;
+            opacity: 0;
+        }
+
+        body:hover #customCursor {
+            opacity: 1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 2px solid var(--text-black);
+            background-color: var(--primary-blue);
+            position: sticky;
+            top: var(--scroll-bar-height);
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Impact', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--text-black);
+            text-decoration: none;
+        }
+
+        .socials-section {
+            padding: 60px 30px;
+            background-color: var(--primary-blue);
+            position: relative;
+            z-index: 5;
+            border-top: 2px solid var(--text-black);
+            text-align: center;
+        }
+
+        .socials-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: -1;
+            animation: noiseAnim 0.5s infinite steps(2);
+        }
+
+        @keyframes noiseAnim {
+            0% { transform: translate(2px, 1px); }
+            25% { transform: translate(-1px, -2px); }
+            50% { transform: translate(-2px, 2px); }
+            75% { transform: translate(1px, -1px); }
+            100% { transform: translate(2px, 1px); }
+        }
+
+        .socials-content {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-black);
+        }
+
+        .socials-content h2 {
+            font-family: 'Impact', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .socials-content .staff-role {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 1rem;
+            text-transform: uppercase;
+            color: var(--text-black);
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .socials-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            display: inline-block;
+            padding: 10px 25px;
+            border: 1px solid var(--text-black);
+            color: var(--text-black);
+            text-decoration: none;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            cursor: none;
+        }
+
+        .social-link:hover {
+            background-color: var(--text-black);
+            color: var(--primary-blue);
+        }
+
+        @media (max-width: 768px) {
+            body, .header-nav a {
+                cursor: default;
+            }
+            #customCursor {
+                display: none;
+            }
+            .header {
+                position: static;
+                flex-direction: column;
+                align-items: center;
+                padding: 15px;
+                top: 0;
+            }
+            body {
+                padding-top: 0;
+            }
+            .logo {
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+            .socials-section {
+                padding: 40px 20px;
+            }
+            .socials-content h2 {
+                font-size: 2rem;
+            }
+            .socials-content .staff-role {
+                font-size: 0.9rem;
+            }
+            .social-link {
+                font-size: 0.8rem;
+                padding: 8px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="scrollProgressBar"></div>
+    <div id="customCursor"></div>
+
+    <header class="header">
+        <a href="../index.html" class="logo">R2R</a>
+    </header>
+
+    <section class="socials-section">
+        <div class="socials-content">
+            <h2>R2R Tactical_Myst</h2>
+            <p class="staff-role">Apex Management</p>
+            <div class="socials-list">
+                <a href="https://www.youtube.com/@Tactical_Myst1" target="_blank" rel="noopener noreferrer" class="social-link">YouTube</a>
+                <a href="https://www.twitch.tv/tacticalmyst_ttv" target="_blank" rel="noopener noreferrer" class="social-link">Twitch</a>
+                <a href="https://x.com/Tactical_Myst" target="_blank" rel="noopener noreferrer" class="social-link">X.com (Twitter)</a>
+                <a href="https://www.tiktok.com/@tacticalmyst_ttv" target="_blank" rel="noopener noreferrer" class="social-link">TikTok</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const customCursor = document.getElementById('customCursor');
+        const scrollProgressBar = document.getElementById('scrollProgressBar');
+
+        function initializeCustomCursor() {
+            if (customCursor) {
+                document.addEventListener('mousemove', (e) => {
+                    customCursor.style.left = e.clientX + 'px';
+                    customCursor.style.top = e.clientY + 'px';
+                });
+            }
+        }
+
+        function updateScrollProgress() {
+            if (!scrollProgressBar) return;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight;
+            const clientHeight = document.documentElement.clientHeight;
+            const totalScrollableHeight = scrollHeight - clientHeight;
+
+            if (totalScrollableHeight <= 0) {
+                scrollProgressBar.style.width = '0%';
+                return;
+            }
+            const scrollPercentage = (scrollTop / totalScrollableHeight) * 100;
+            scrollProgressBar.style.width = scrollPercentage + '%';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeCustomCursor();
+            updateScrollProgress();
+            window.addEventListener('scroll', updateScrollProgress);
+        });
+
+        if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
+            setTimeout(() => {
+                updateScrollProgress();
+            }, 100);
+        }
+    </script>
+</body>
+</html>
