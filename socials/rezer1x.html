@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R2R Aryest - Socials</title>
+    <style>
+        :root {
+            --primary-blue: #AFEEEE;
+            --text-black: #0d0d0d;
+            --accent-white: #f0f0f0;
+            --line-color: var(--text-black);
+            --scroll-bar-height: 4px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica Neue', sans-serif;
+            background-color: var(--primary-blue);
+            color: var(--text-black);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            cursor: none;
+            padding-top: var(--scroll-bar-height);
+            overflow-x: hidden;
+        }
+
+        #scrollProgressBar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: var(--scroll-bar-height);
+            background-color: var(--text-black);
+            width: 0%;
+            z-index: 101;
+            transition: width 0.1s linear;
+        }
+
+        #customCursor {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background-color: var(--accent-white);
+            border: 1px solid var(--text-black);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+            transition: opacity 0.2s ease-out, transform 0.05s linear;
+            opacity: 1;
+        }
+
+        body:hover #customCursor {
+            opacity: 1;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 2px solid var(--text-black);
+            background-color: var(--primary-blue);
+            position: sticky;
+            top: var(--scroll-bar-height);
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            font-family: 'Impact', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--text-black);
+            margin-right: 20px;
+            line-height: 1;
+            text-decoration: none;
+        }
+
+        .taglines {
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            line-height: 1.4;
+            color: var(--text-black);
+            text-transform: uppercase;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-weight: normal;
+        }
+
+        .header-nav {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .header-nav a {
+            text-decoration: none;
+            color: var(--text-black);
+            margin: 0 15px;
+            font-size: 0.9rem;
+            font-weight: normal;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+            cursor: none;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+
+        .header-nav a:hover {
+            color: var(--accent-white);
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            margin-left: 15px;
+        }
+
+        .icon {
+            font-size: 1.2rem;
+            margin-left: 15px;
+            cursor: none;
+            color: var(--text-black);
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-weight: normal;
+            text-decoration: none;
+        }
+
+        .icon:hover {
+            color: var(--accent-white);
+        }
+
+        .header-right-text {
+            flex-shrink: 0;
+            text-align: right;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            color: var(--text-black);
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+
+        .header-right-text .hire-me {
+            font-weight: normal;
+        }
+
+        .header-right-text .hire-me a {
+            font-weight: normal;
+            color: var(--text-black);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            cursor: none;
+        }
+
+        .header-right-text .hire-me a:hover {
+            color: var(--accent-white);
+        }
+
+        .socials-section {
+            padding: 60px 30px;
+            background-color: var(--primary-blue);
+            position: relative;
+            z-index: 5;
+            border-top: 2px solid var(--text-black);
+            text-align: center;
+        }
+
+        .socials-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: -1;
+            animation: noiseAnim 0.5s infinite steps(2);
+        }
+
+        @keyframes noiseAnim {
+            0% { transform: translate(2px, 1px); }
+            25% { transform: translate(-1px, -2px); }
+            50% { transform: translate(-2px, 2px); }
+            75% { transform: translate(1px, -1px); }
+            100% { transform: translate(2px, 1px); }
+        }
+
+        .socials-content {
+            max-width: 800px;
+            margin: 0 auto;
+            color: var(--text-black);
+        }
+
+        .socials-content h2 {
+            font-family: 'Impact', Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .socials-content h2 span {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(15px);
+            animation: letterAppear 0.4s forwards;
+        }
+
+        .socials-content .staff-role {
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 1rem;
+            text-transform: uppercase;
+            color: var(--text-black);
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .socials-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            display: inline-block;
+            padding: 10px 25px;
+            border: 1px solid var(--text-black);
+            color: var(--text-black);
+            text-decoration: none;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            cursor: none;
+        }
+
+        .social-link:hover {
+            background-color: var(--text-black);
+            color: var(--primary-blue);
+        }
+
+        @keyframes letterAppear {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body, .header-nav a, .icon, .header-right-text a {
+                cursor: default;
+            }
+            #customCursor {
+                display: block;
+                width: 15px;
+                height: 15px;
+            }
+            .header {
+                position: static;
+                flex-direction: column;
+                align-items: center;
+                padding: 15px;
+                top: 0;
+            }
+            body {
+                padding-top: 0;
+            }
+            .header-left {
+                flex-direction: column;
+                align-items: center;
+                margin-bottom: 15px;
+            }
+            .logo {
+                margin-right: 0;
+                margin-bottom: 5px;
+                font-size: 2rem;
+            }
+            .taglines {
+                text-align: center;
+                font-size: 0.6rem;
+            }
+            .header-nav {
+                flex-grow: 0;
+                width: 100%;
+                justify-content: center;
+                margin-top: 10px;
+                flex-wrap: wrap;
+                padding: 0 10px;
+            }
+            .header-nav a {
+                margin: 5px 10px;
+                font-size: 0.8rem;
+            }
+            .header-icons {
+                margin-left: 10px;
+            }
+            .header-right-text {
+                text-align: center;
+                margin-top: 10px;
+                margin-left: 0;
+                font-size: 0.7rem;
+                width: 100%;
+            }
+            .socials-section {
+                padding: 40px 20px;
+            }
+            .socials-content h2 {
+                font-size: 2rem;
+            }
+            .socials-content .staff-role {
+                font-size: 0.9rem;
+            }
+            .social-link {
+                font-size: 0.8rem;
+                padding: 8px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="scrollProgressBar"></div>
+    <div id="customCursor"></div>
+
+    <header class="header">
+        <div class="header-left">
+            <a href="../index.html" class="logo">R2R</a>
+            <div class="taglines"> SYSTEM ONLINE<br> PLOTTING TRAJECTORY<br> ADJUSTING PARAMETERS...<br> ENGAGE </div>
+        </div>
+        <nav class="header-nav">
+            <a href="../index.html#about">About</a>
+            <a href="../index.html#games">Games</a>
+            <a href="../index.html#contact">Contact</a>
+            <div class="header-icons">
+                <a href="https://discord.gg/ThSXgGCc7T" target="_blank" rel="noopener noreferrer" class="icon discord-icon">DISCORD</a>
+            </div>
+        </nav>
+        <div class="header-right-text"> Esports Team Globally.<br> <span class="hire-me">Currently Recruiting → <a href="https://form.jotform.com/251150935077153" target="_blank" rel="noopener noreferrer">Apply Now</a></span>
+        </div>
+    </header>
+
+    <section class="socials-section">
+        <div class="socials-content">
+            <h2 class="animated-text">R2R Aryest</h2>
+            <p class="staff-role">Co-Founder</p>
+            <div class="socials-list">
+                <a href="https://www.instagram.com/rezer1x" target="_blank" rel="noopener noreferrer" class="social-link">Instagram</a>
+                <a href="https://youtube.com/@rezer1xs" target="_blank" rel="noopener noreferrer" class="social-link">YouTube</a>
+                <a href="https://twitch.tv/rezer1xs" target="_blank" rel="noopener noreferrer" class="social-link">Twitch</a>
+                <a href="https://x.com/rezer1x" target="_blank" rel="noopener noreferrer" class="social-link">X.com (Twitter)</a>
+                <a href="https://www.tiktok.com/@rezer1xs" target="_blank" rel="noopener noreferrer" class="social-link">TikTok</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const customCursor = document.getElementById('customCursor');
+        const scrollProgressBar = document.getElementById('scrollProgressBar');
+
+        function initializeCustomCursor() {
+            if (customCursor) {
+                document.addEventListener('mousemove', (e) => {
+                    customCursor.style.left = e.clientX + 'px';
+                    customCursor.style.top = e.clientY + 'px';
+                });
+                document.addEventListener('touchmove', (e) => {
+                    if (e.touches.length > 0) {
+                        customCursor.style.left = e.touches[0].clientX + 'px';
+                        customCursor.style.top = e.touches[0].clientY + 'px';
+                    }
+                }, { passive: true });
+                document.addEventListener('touchstart', () => {
+                    customCursor.style.opacity = '1';
+                }, { passive: true });
+            }
+        }
+
+        function updateScrollProgress() {
+            if (!scrollProgressBar) return;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const scrollHeight = document.documentElement.scrollHeight;
+            const clientHeight = document.documentElement.clientHeight;
+            const totalScrollableHeight = scrollHeight - clientHeight;
+
+            if (totalScrollableHeight <= 0) {
+                scrollProgressBar.style.width = '0%';
+                return;
+            }
+            const scrollPercentage = (scrollTop / totalScrollableHeight) * 100;
+            scrollProgressBar.style.width = scrollPercentage + '%';
+        }
+
+        function animateTextLetters(selector, delayStep = 0.05) {
+            document.querySelectorAll(selector).forEach(element => {
+                if (element.classList.contains('letters-animated')) return;
+
+                const text = element.textContent;
+                element.textContent = '';
+                element.classList.add('letters-animated');
+
+                text.split('').forEach((char, index) => {
+                    const span = document.createElement('span');
+                    span.textContent = char === ' ' ? '\u00A0' : char;
+                    span.style.animationDelay = `${index * delayStep}s`;
+                    element.appendChild(span);
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeCustomCursor();
+            updateScrollProgress();
+            window.addEventListener('scroll', updateScrollProgress);
+            animateTextLetters('.socials-content h2', 0.05);
+        });
+
+        if (document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
+            setTimeout(() => {
+                updateScrollProgress();
+            }, 100);
+        }
+    </script>
+</body>
+</html>
